@@ -1,0 +1,51 @@
+---
+version: "3.4"
+
+services:
+  h2cbackend:
+    build: ./h2cbackend
+  traefik:
+    image: traefik:2.2
+    restart: always
+    ports:
+      - 8080:80
+      - 8443:443
+    volumes:
+    - ./traefik:/etc/traefik/
+  nginx:
+    image: nginx
+    ports:
+      - 8081:80
+      - 8444:443
+    volumes:
+    - ./nginx:/etc/nginx/
+  traefikv1:
+    image: traefik:1.7
+    restart: always
+    ports:
+      - 8082:80
+      - 8445:443
+    volumes:
+    - ./traefikv1:/etc/traefik/
+  haproxy:
+    image: haproxy:latest
+    ports:
+      - 8083:80
+      - 8446:443
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./haproxy/haproxy.pem:/tmp/haproxy.pem
+    links:
+      - h2cbackend
+  nuster:
+    image: nuster/nuster:latest
+    ports:
+      - 8084:80
+      - 8447:443
+    volumes:
+      - ./haproxy/nuster.cfg:/etc/nuster/nuster.cfg:ro
+      - ./haproxy/haproxy.pem:/tmp/haproxy.pem
+    links:
+      - h2cbackend
+      - haproxy
+
