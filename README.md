@@ -1,6 +1,6 @@
 # Golang Client
 
-`docker-compose up` to launch Traefik, nginx and an upgradable to h2c backend
+`docker-compose up` to launch Traefik, nginx, haproxy, nuster and an upgradable to h2c backend
 
 `go run ./` to launch the client test
 
